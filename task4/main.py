@@ -8,9 +8,12 @@ def input_error(func):
             return str(e)
         except IndexError:
             return "Enter the argument for the command"
+        except KeyboardInterrupt:
+            return ""
     return inner
 
 
+@input_error
 def parse_input(user_input: str):
     cmd, *args = user_input.split()
     if not cmd:
@@ -72,11 +75,15 @@ def show_all(contacts):
     return "\n".join(lines)
 
 
+@input_error
 def main():
     contacts = {}
     print("Welcome to the assistant bot!")
     while True:
         user_input = input("Enter a command: ")
+        if not user_input:
+            continue
+
         command, *args = parse_input(user_input)
 
         if command in ["close", "exit"]:
